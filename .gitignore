@@ -4,6 +4,10 @@ src/Timecard/__pycache__
 *.py[cod]
 *$py.class
 
+# VIM
+*.swp
+*.swo
+
 # C extensions
 *.so
 
