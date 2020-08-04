@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
 src/__pycache__/
+src/Timecard/__pycache__
 *.py[cod]
 *$py.class
 
