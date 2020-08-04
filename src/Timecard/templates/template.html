@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<html>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <head>
+        <title>QR Timecard</title>
+    </head>
+    <main>
+        {% block body %}
+        {% endblock %}
+    </main>
+</html>
