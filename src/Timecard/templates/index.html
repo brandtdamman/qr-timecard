@@ -1,0 +1,15 @@
+{% extends "template.html" %}
+{% block body %}
+
+<div class="w3-container" style="margin-top:30%">
+    <!--TODO: Move styling to custom index.css file.-->
+    <div style="margin: auto; display: flex; justify-content: center; align-items: center;">
+        <a style="font-size: large; padding: 2%; color: #fff; background-color: #e93600; border: 10px solid #e93600; border-radius: 5px;" href="{{ url_for('readcode') }}">Clock In/Out</a>
+    </div>
+    <!--TODO: Update notice to pull from a local text file (due to possible frequent changes).-->
+    <div style="margin: auto; padding: 5%">
+        By using the QR Timecard system, you agree to have your name (with timestamp) put into a text file accessible to only a few individuals.
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "template.html" %}
+{% block body %}
+<!--TODO: Make this field required somehow.-->
+<div class="w3-container" style="margin-top:30%">
+    <p class="w3-cell">Person clocking in or out: </p>
+    <input id="user" placeholder="First Last" autofocus type="text">
+</div>
+
+<div class="w3-container" style="margin-top:10%; margin-bottom:15%">
+    <div id="reader" width="50%"></div>
+</div>
+
+<!--Include HTML5 QR Code Scanner library.-->
+<script src="{{ url_for('static', filename='html5-qrcode.min.js') }}">
+
+</script>
+<script>
+    // At page load, setup scanner from library.
+    // Courtesy of https://github.com/mebjas/html5-qrcode repository.
+    // FPS should be adjusted to match average tolerable performance.
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", { fps: 15, qrbox: 250 }, /* verbose= */ true);
+
+    function onScanSuccess(qrMessage) {
+        // Split QR code information up by semicolons.
+        result = qrMessage.split(";")
+
+        // Grabs username from 'user' input tag.
+        var user = document.getElementById('user')
+        
+        // Send POST request to this page.  Flask will handle the request.
+        fetch("/readcode", {
+            method: "POST",
+            // Header not necessarily needed but is good practice.
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({ "type": result[0], "location": result[1], "user": x.value })
+        }).then(res => {
+            console.log("Request complete! response:", res);
+            // Redirect by using DOM.  Flask redirect does not work for some reason.
+            // TODO: Find out why Flask redirect does not work and fix it.
+            window.location.href = "/index"
+        });
+
+        // Nullify the scanner to avoid having more than one request since.  Not ideal.
+        // TODO: Change POST request to prohibit more than one request per "session."
+        html5QrcodeScanner = null
+    }
+
+    function onScanFailure(error) {
+        // Not really used.  Left since it is required by the library.
+        console.warn(`QR error = ${error}`);
+    }
+    
+    // Render the scanner at page load (placed within 'render' div).
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+</script>
+
+{% endblock %}

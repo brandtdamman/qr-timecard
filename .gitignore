@@ -1,7 +1,13 @@
-# Byte-compiled / optimized / DLL files
+src/timecard
+src/*.pem
 src/__pycache__/
+src/Timecard/__pycache__
 *.py[cod]
 *$py.class
+
+# VIM
+*.swp
+*.swo
 
 # C extensions
 *.so
