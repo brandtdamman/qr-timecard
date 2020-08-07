@@ -13,6 +13,9 @@
 
 </script>
 <script>
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", { fps: 20, qrbox: 250 }, /* verbose= */ true);
+
     function onScanSuccess(qrMessage) {
         // handle the scanned code as you like
         //console.log(`QR matched = ${qrMessage}`);
@@ -23,11 +26,11 @@
         var x = document.getElementById('user')
         // alert(x.value)
 
-        alert(JSON.stringify({ "type": result[0],
-                                "location": result[1],
-                                "user": x.value }))
+        // alert(JSON.stringify({ "type": result[0],
+        //                         "location": result[1],
+        //                         "user": x.value }))
 
-        fetch("/readcode.html", {
+        fetch("/readcode", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -35,16 +38,18 @@
             body: JSON.stringify({ "type": result[0], "location": result[1], "user": x.value })
         }).then(res => {
             console.log("Request complete! response:", res);
+            window.location.href = "/index"
         });
+
+        //html5QrcodeScanner.stop()
+        html5QrcodeScanner = null
     }
 
     function onScanFailure(error) {
         // handle scan failure, usually better to ignore and keep scanning
         console.warn(`QR error = ${error}`);
     }
-
-    let html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader", { fps: 20, qrbox: 250 }, /* verbose= */ true);
+    
     html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 </script>
 

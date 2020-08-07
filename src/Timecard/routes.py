@@ -6,11 +6,12 @@ from time import localtime
 
 # Routes
 @app.route('/')
+@app.route('/index')
 def index():
     """ Returns the homepage. """
     return render_template('index.html')
 
-@app.route('/readcode.html', methods=['GET', 'POST'])
+@app.route('/readcode', methods=['GET', 'POST'])
 def readcode():
     """ QR Code scanner page. """
     if request.method == 'POST':
@@ -32,6 +33,6 @@ def readcode():
             clock.write(f"[{time}]: User '{data.get('user')}' clocked out at {data.get('location')}\n")
 
         clock.close()
-        return render_template('index.html')
+        return redirect(url_for('index'))
 
     return render_template('readcode.html')
