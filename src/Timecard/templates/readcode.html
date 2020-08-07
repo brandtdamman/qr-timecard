@@ -1,0 +1,51 @@
+{% extends "template.html" %}
+{% block body %}
+<div class="w3-container" style="margin-top:30%">
+    <p class="w3-cell">Person clocking in or out: </p>
+    <input id="user" placeholder="First Last" autofocus type="text">
+</div>
+
+<div class="w3-container" style="margin-top:30%; margin-bottom:30%">
+    <div id="reader" width="50%"></div>
+</div>
+
+<script src="{{ url_for('static', filename='html5-qrcode.min.js') }}">
+
+</script>
+<script>
+    function onScanSuccess(qrMessage) {
+        // handle the scanned code as you like
+        //console.log(`QR matched = ${qrMessage}`);
+        //alert(`${qrMessage}`)
+
+        result = qrMessage.split(";")
+
+        var x = document.getElementById('user')
+        // alert(x.value)
+
+        alert(JSON.stringify({ "type": result[0],
+                                "location": result[1],
+                                "user": x.value }))
+
+        fetch("/readcode.html", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({ "type": result[0], "location": result[1], "user": x.value })
+        }).then(res => {
+            console.log("Request complete! response:", res);
+        });
+    }
+
+    function onScanFailure(error) {
+        // handle scan failure, usually better to ignore and keep scanning
+        console.warn(`QR error = ${error}`);
+    }
+
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", { fps: 20, qrbox: 250 }, /* verbose= */ true);
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+</script>
+
+{% endblock %}

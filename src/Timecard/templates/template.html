@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 
 <html>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='w3pro.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='w3-theme-deep-orange.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <head>
         <title>QR Timecard</title>
     </head>
     <main>
+        <header class="w3-top w3-bar w3-theme">
+            <h1 class="w3-bar-item">QR Timecard</h1>
+        </header>
         {% block body %}
         {% endblock %}
+        <footer class="w3-container w3-bottom w3-theme w3-margin-top">
+            <h3>Made by Brandt Damman</h3>
+        </footer>
     </main>
 </html>

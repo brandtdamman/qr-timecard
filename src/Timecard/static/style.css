@@ -1,4 +1,4 @@
-h1, h2, h3 {
+/* h1, h2, h3 {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #eb8b1e;
     border: 4px solid #d8801b;
@@ -9,4 +9,25 @@ h1, h2, h3 {
 
 h1 {
     font-size: xx-large;
+} */
+
+.theme {
+    color: white;
+    background-color: #eb8b1e;
+}
+
+.header-top {
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+    display: inline-block;
+}
+
+.w3-bar .w3-bar-item {
+    padding: 8px 16px;
+    float: left;
+    width: 100%;
+    border: none;
+    display: block;
+    outline: 0
 }
