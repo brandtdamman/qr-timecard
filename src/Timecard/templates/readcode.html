@@ -15,16 +15,25 @@
 
 </script>
 <script>
-    // At page load, setup scanner from library.
-    // Courtesy of https://github.com/mebjas/html5-qrcode repository.
+    // At page load, setup scanner from library.  Courtesy of 
+    //      https://github.com/mebjas/html5-qrcode repository.
     // FPS should be adjusted to match average tolerable performance.
     let html5QrcodeScanner = new Html5QrcodeScanner(
         "reader", { fps: 15, qrbox: 250 }, /* verbose= */ true);
 
+    ///
+    ///
+    ///
     function onScanSuccess(qrMessage) {
         // Split QR code information up by semicolons.
         result = qrMessage.split(";")
 
+        // Confirm that QR Code is "valid" for timecard system.
+        // TODO: Cross-check data with database values.
+        if (validate_input(result)) {
+            return
+        }
+        
         // Grabs username from 'user' input tag.
         var user = document.getElementById('user')
         
@@ -35,7 +44,10 @@
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
-            body: JSON.stringify({ "type": result[0], "location": result[1], "user": x.value })
+            body: JSON.stringify({
+                        "type": result[0], 
+                        "location": result[1], 
+                        "user": user.value })
         }).then(res => {
             console.log("Request complete! response:", res);
             // Redirect by using DOM.  Flask redirect does not work for some reason.
@@ -51,6 +63,31 @@
     function onScanFailure(error) {
         // Not really used.  Left since it is required by the library.
         console.warn(`QR error = ${error}`);
+    }
+
+    ///
+    /// Validates the information scanned from QR Code.
+    ///
+    function validate_input(data) {
+        // QR Code must only contain two pieces of information.
+        if (data.length != 2) {
+            return false
+        }
+
+        // QR Code key 'type' must be either 'In' or 'Out.'
+        // TODO: Make 'type' it case-insensitive
+        if (data[0] != 'In' || data[0] != 'Out') {
+            return false
+        }
+
+        // QR Code key 'location' must not contain anything but alphanumerics.
+        var patt = /[^a-zA-Z0-9.-]/g
+        if (patt.test(data[1])) {
+            return false
+        }
+
+        // Data is now considered valid.
+        return true
     }
     
     // Render the scanner at page load (placed within 'render' div).
