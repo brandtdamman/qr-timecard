@@ -22,16 +22,16 @@
         "reader", { fps: 15, qrbox: 250 }, /* verbose= */ true);
 
     ///
-    ///
+    /// Handles QR data when successfully found.
     ///
     function onScanSuccess(qrMessage) {
         // Split QR code information up by semicolons.
         result = qrMessage.split(";")
 
-        // Confirm that QR Code is "valid" for timecard system.
+        // Confirm that QR code is "valid" for timecard system.
         // TODO: Cross-check data with database values.
-        if (validate_input(result)) {
-            return
+        if (!validate_input(result)) {
+            alert("Invalid QR code presented.  Please scan a differet one.")
         }
         
         // Grabs username from 'user' input tag.
@@ -60,27 +60,30 @@
         html5QrcodeScanner = null
     }
 
+    ///
+    /// Warns developers via console regarding invalid code.
+    ///
     function onScanFailure(error) {
         // Not really used.  Left since it is required by the library.
         console.warn(`QR error = ${error}`);
     }
 
     ///
-    /// Validates the information scanned from QR Code.
+    /// Validates the information scanned from QR code.
     ///
     function validate_input(data) {
-        // QR Code must only contain two pieces of information.
+        // QR code must only contain two pieces of information.
         if (data.length != 2) {
             return false
         }
 
-        // QR Code key 'type' must be either 'In' or 'Out.'
+        // QR code key 'type' must be either 'In' or 'Out.'
         // TODO: Make 'type' it case-insensitive
         if (data[0] != 'In' || data[0] != 'Out') {
             return false
         }
 
-        // QR Code key 'location' must not contain anything but alphanumerics.
+        // QR code key 'location' must not contain anything but alphanumerics.
         var patt = /[^a-zA-Z0-9.-]/g
         if (patt.test(data[1])) {
             return false
